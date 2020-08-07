@@ -56,3 +56,10 @@ jobs:
           path: ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg
           # The desired behavior if no files are found using the provided path.
           if-no-files-found: error
+      - name: Publish to GitHub Packages
+        uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+        with:
+          nupkg-path:  ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg
+          repo-owner:  'thesuavehog'
+          gh-user:  'thesuavehog'
+          token:  ${{ secrets.GITHUB_TOKEN }}
