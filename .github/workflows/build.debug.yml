@@ -43,7 +43,7 @@ jobs:
           path: ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/**/*
           # The desired behavior if no files are found using the provided path.
           if-no-files-found: error
-      - name: Test
-        run: dotnet test --configuration $env:BUILD_CONFIGURATION --verbosity normal $env:PROJECT_TESTS
+#      - name: Test
+#        run: dotnet test --configuration $env:BUILD_CONFIGURATION --verbosity normal $env:PROJECT_TESTS
       - name: Package
         run: dotnet pack --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
