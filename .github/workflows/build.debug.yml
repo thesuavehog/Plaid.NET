@@ -25,17 +25,15 @@ jobs:
           dotnet-version: 3.1.301
       - name: Install-Module PowerShellGet
         run: Install-Module -Name PowerShellGet -Force
-  
+
   build:
     needs: [env-setup]
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.2
-      - name: Install Dependencies
-        run: dotnet restore $env:PROJECT_MAIN
       - name: Build
-        run: dotnet build --configuration $env:BUILD_CONFIGURATION --no-restore $env:PROJECT_MAIN
+        run: dotnet build --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
       - name: Upload Build Output
         uses: actions/upload-artifact@v2.1.3
         with:
@@ -45,19 +43,7 @@ jobs:
           path: ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/netstandard2.0/**/*
           # The desired behavior if no files are found using the provided path.
           if-no-files-found: error
-      
-#  test:
-#    needs: [build]
-#    runs-on: windows-latest
-#    steps:
-#      - name: Install Dependencies
-#        run: dotnet restore $env:PROJECT_TESTS
-#      - name: Test
-#        run: dotnet test --configuration $env:BUILD_CONFIGURATION --verbosity normal --no-restore $env:PROJECT_TESTS
-
-  package:
-    needs: [build]
-    runs-on: windows-latest
-    steps:
+      - name: Test
+        run: dotnet test --configuration $env:BUILD_CONFIGURATION --verbosity normal $env:PROJECT_TESTS
       - name: Package
         run: dotnet pack --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
