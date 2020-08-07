@@ -24,7 +24,8 @@
     <AssemblyFileVersion>0.0.12</AssemblyFileVersion>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>https://github.com/Ackara/Plaid.NET/blob/master/changelog.md</PackageReleaseNotes>
-</PropertyGroup>
+    <PackageLicenseFile>https://github.com/Ackara/Plaid.NET/blob/master/LICENSE</PackageLicenseFile>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard2.0\Acklann.Plaid.xml</DocumentationFile>
