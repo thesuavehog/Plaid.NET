@@ -17,8 +17,6 @@ jobs:
         uses: actions/setup-dotnet@v1.5.0
         with:
           dotnet-version: 3.1.301
-      - name: Update NuGet
-        run: Install-PackageProvider -Name NuGet -Force
       - name: Install-Module PowerShellGet
         run: Install-Module -Name PowerShellGet -Force
   
