@@ -32,22 +32,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.2
       - name: Install Dependencies
-        run: dotnet restore %PROJECT_MAIN%
+        run: dotnet restore $env:PROJECT_MAIN
       - name: Build
-        run: dotnet build --configuration %BUILD_CONFIGURATION% --no-restore %PROJECT_MAIN%
+        run: dotnet build --configuration $env:BUILD_CONFIGURATION --no-restore $env:PROJECT_MAIN
       
   test:
     needs: [build]
     runs-on: windows-latest
     steps:
       - name: Install Dependencies
-        run: dotnet restore %PROJECT_TESTS%
+        run: dotnet restore $env:PROJECT_TESTS
       - name: Test
-        run: dotnet test --configuration %BUILD_CONFIGURATION% --verbosity normal --no-restore %PROJECT_TESTS%
+        run: dotnet test --configuration $env:BUILD_CONFIGURATION --verbosity normal --no-restore $env:PROJECT_TESTS
 
   package:
     needs: [test]
     runs-on: windows-latest
     steps:
       - name: Package
-        run: dotnet pack --configuration %BUILD_CONFIGURATION% %PROJECT_MAIN%
+        run: dotnet pack --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
