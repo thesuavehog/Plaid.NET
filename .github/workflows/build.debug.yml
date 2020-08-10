@@ -40,6 +40,14 @@ jobs:
           echo "Company: $($env:REPO_OWNER)"
           $xml.SelectNodes("//PropertyGroup/RepositoryUrl") | % { $_."#text" = $env:REPO_URL }
           echo "RepositoryUrl: $($env:REPO_URL)"
+          $xml.SelectNodes("//PropertyGroup/Version") | % { $_."#text" = "$($_.'#text').$(env.GITHUB_RUN_NUMBER)-beta" }
+          echo "Version: $($xml.SelectNodes("//PropertyGroup/Version").'#test')"
+          $xml.SelectNodes("//PropertyGroup/AssemblyVersion") | % { $_."#text" = "$($_.'#text').$(env.GITHUB_RUN_NUMBER)-beta" }
+          echo "AssemblyVersion: $($xml.SelectNodes("//PropertyGroup/AssemblyVersion").'#test')"
+          $xml.SelectNodes("//PropertyGroup/PackageVersion") | % { $_."#text" = "$($_.'#text').$(env.GITHUB_RUN_NUMBER)-beta" }
+          echo "PackageVersion: $($xml.SelectNodes("//PropertyGroup/PackageVersion").'#test')"
+          $xml.SelectNodes("//PropertyGroup/AssemblyFileVersion") | % { $_."#text" = "$($_.'#text').$(env.GITHUB_RUN_NUMBER)-beta" }
+          echo "AssemblyFileVersion: $($xml.SelectNodes("//PropertyGroup/AssemblyFileVersion").'#test')"
           $xml.Save($env:PROJECT_MAIN)
       - name: Extract Project Metadata
         run: |
