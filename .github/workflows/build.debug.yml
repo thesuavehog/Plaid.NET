@@ -13,6 +13,7 @@ env:
   BUILD_CONFIGURATION: Debug
   REPO_OWNER: ${{ github.repository_owner }}
   REPO_URL: https://github.com/${{ github.repository_owner }}/Plaid.NET.git
+  NUGET_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
 
 jobs:
   
@@ -25,10 +26,6 @@ jobs:
         uses: actions/setup-dotnet@v1.6.0
         with:
           dotnet-version: 3.1.x
-          source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-          owner: ${{ github.repository_owner }}
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
   build:
     needs: [env-setup]
@@ -84,11 +81,5 @@ jobs:
       #  run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to Github Packages
         run: |
-          dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --source "github" --skip-duplicate --no-symbols true
-        # run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --skip-duplicate --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --no-symbols true
-        #run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg --skip-duplicate --no-symbols true --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-        #run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --source "github"
-      #- name: Remove GitHub NuGet Source
-      #  if: ${{ always() }}
-      #  run: dotnet nuget remove source github
+          dotnet nuget add source ${{ env.NUGET_SOURCE }} -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg --source "github" --skip-duplicate
