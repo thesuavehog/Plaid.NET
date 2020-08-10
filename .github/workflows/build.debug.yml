@@ -13,6 +13,7 @@ env:
   PROJECT_BIN: src/Plaid/bin
   PROJECT_MAIN: src/Plaid/Plaid.csproj
   PROJECT_TESTS: tests/Plaid.MSTest/Plaid.MSTest.csproj
+  PROJECT_URL: https://github.com/${{ github.repository }}
   REPO_OWNER: ${{ github.repository_owner }}
   REPO_URL: https://github.com/${{ github.repository }}.git
   NUGET_SOURCE: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
@@ -46,6 +47,10 @@ jobs:
           # Set Repository Url so that source debugging points back to the right git repo
           $xml.SelectNodes("//PropertyGroup/RepositoryUrl") | % { $_."#text" = $env:REPO_URL }
           echo "RepositoryUrl: $($env:REPO_URL)"
+          #
+          # Set Project Url so that it's clear in NuGet properties this is either the root or a fork
+          $xml.SelectNodes("//PropertyGroup/PackageProjectUrl") | % { $_."#text" = $env:PROJECT_URL }
+          echo "PackageProjectUrl: $($env:PROJECT_URL)"
           #
           # Append the build number to the Assembly Version
           $version = "$($xml.SelectNodes('//PropertyGroup/Version').'#text').$($env:GITHUB_RUN_NUMBER)"
@@ -107,4 +112,4 @@ jobs:
 # NOTE: *.nupkg does not work when pushing
         run: |
           dotnet nuget add source ${{ env.NUGET_SOURCE }} -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.NUGET_VERSION }}.nupkg --source "github" --skip-duplicates
+          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.NUGET_VERSION }}.nupkg --source "github" --skip-duplicate
