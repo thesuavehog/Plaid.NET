@@ -25,13 +25,6 @@ jobs:
           dotnet-version: 3.1.301
       - name: Install-Module PowerShellGet
         run: Install-Module -Name PowerShellGet -Force
-      - name: Extract Project Metadata
-        run: |
-          [xml]$xml = Get-Content '.\src\Plaid\Plaid.csproj';
-          $val = $xml.SelectNodes('//PropertyGroup/AssemblyName') | Select-Object -Expand '#text'
-          echo "::set-env name=ASSEMBLY_NAME::$($val)"
-          $val = $xml.SelectNodes('//PropertyGroup/AssemblyVersion') | Select-Object -Expand '#text'
-          echo "::set-env name=ASSEMBLY_VERSION::$($val)"
 
   build:
     needs: [env-setup]
@@ -39,6 +32,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.3.2
+      - name: Extract Project Metadata
+        run: |
+          [xml]$xml = Get-Content $env:PROJECT_MAIN;
+          $val = $xml.SelectNodes('//PropertyGroup/AssemblyName') | Select-Object -Expand '#text'
+          echo "::set-env name=ASSEMBLY_NAME::$($val)"
+          $val = $xml.SelectNodes('//PropertyGroup/AssemblyVersion') | Select-Object -Expand '#text'
+          echo "::set-env name=ASSEMBLY_VERSION::$($val)"
       - name: Build
         run: dotnet build --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
       - name: Upload Build Output Artifact
