@@ -40,13 +40,13 @@ jobs:
           echo "Company: $($env:REPO_OWNER)"
           $xml.SelectNodes("//PropertyGroup/RepositoryUrl") | % { $_."#text" = $env:REPO_URL }
           echo "RepositoryUrl: $($env:REPO_URL)"
-          $version = "$($xml.SelectNodes('//PropertyGroup/Version').'#text').$($env:GITHUB_RUN_NUMBER)-beta"
+          $version = "$($xml.SelectNodes('//PropertyGroup/Version').'#text').$($env:GITHUB_RUN_NUMBER)"
           if ($version -eq '') { Write-Error "Missing Version Number" }
-          $xml.SelectNodes("//PropertyGroup/Version") | % { $_."#text" = $version }
+          $xml.SelectNodes("//PropertyGroup/Version") | % { $_."#text" = "$($version)-beta" }
           echo "Version: $($xml.SelectNodes('//PropertyGroup/Version').'#text')"
           $xml.SelectNodes("//PropertyGroup/AssemblyVersion") | % { $_."#text" = $version }
           echo "AssemblyVersion: $($xml.SelectNodes('//PropertyGroup/AssemblyVersion').'#text')"
-          $xml.SelectNodes("//PropertyGroup/PackageVersion") | % { $_."#text" = $version }
+          $xml.SelectNodes("//PropertyGroup/PackageVersion") | % { $_."#text" = "$($version)-beta" }
           echo "PackageVersion: $($xml.SelectNodes('//PropertyGroup/PackageVersion').'#text')"
           $xml.SelectNodes("//PropertyGroup/AssemblyFileVersion") | % { $_."#text" = $version }
           echo "AssemblyFileVersion: $($xml.SelectNodes('//PropertyGroup/AssemblyFileVersion').'#text')"
