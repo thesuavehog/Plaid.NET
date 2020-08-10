@@ -57,9 +57,9 @@ jobs:
           $val = $xml.SelectNodes('//PropertyGroup/AssemblyName') | Select-Object -Expand '#text'
           echo "ASSEMBLY_NAME: $($val)"
           echo "::set-env name=ASSEMBLY_NAME::$($val)"
-          $val = $xml.SelectNodes('//PropertyGroup/AssemblyVersion') | Select-Object -Expand '#text'
-          echo "ASSEMBLY_VERSION: $($val)"
-          echo "::set-env name=ASSEMBLY_VERSION::$($val)"
+          $val = $xml.SelectNodes('//PropertyGroup/Version') | Select-Object -Expand '#text'
+          echo "NUGET_VERSION: $($val)"
+          echo "::set-env name=NUGET_VERSION::$($val)"
       - name: Build
         run: dotnet build --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
       - name: Upload Build Output Artifact
@@ -92,4 +92,4 @@ jobs:
       - name: Publish to Github Packages
         run: |
           dotnet nuget add source ${{ env.NUGET_SOURCE }} -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --source "github" --skip-duplicate
+          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.NUGET_VERSION }}.nupkg --source "github" --skip-duplicate
