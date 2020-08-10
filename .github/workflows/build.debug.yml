@@ -7,9 +7,9 @@ on:
     branches: [ master ]
 
 env:
-  PROJECT_BIN: ./src/Plaid/bin
-  PROJECT_MAIN: ./src/Plaid/Plaid.csproj
-  PROJECT_TESTS: ./tests/Plaid.MSTest/Plaid.MSTest.csproj
+  PROJECT_BIN: src/Plaid/bin
+  PROJECT_MAIN: src/Plaid/Plaid.csproj
+  PROJECT_TESTS: tests/Plaid.MSTest/Plaid.MSTest.csproj
   BUILD_CONFIGURATION: Debug
 
 jobs:
