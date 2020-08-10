@@ -82,4 +82,5 @@ jobs:
       - name: Publish to Github Packages
         run: |
           dotnet nuget add source ${{ env.NUGET_SOURCE }} -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg --source "github" --skip-duplicate
+          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --source "github" --skip-duplicate
+          dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.symbols.nupkg --source "github" --skip-duplicate
