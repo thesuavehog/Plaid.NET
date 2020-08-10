@@ -57,9 +57,18 @@ jobs:
           # The desired behavior if no files are found using the provided path.
           if-no-files-found: error
       - name: Publish to GitHub Packages
-        uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+        #uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+        #with:
+        #  nupkg-path:  ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg
+        #  repo-owner:  'thesuavehog'
+        #  gh-user:  'thesuavehog'
+        #  token:  ${{ secrets.GITHUB_TOKEN }}
+        uses: brandedoutcast/publish-nuget@v2.5.2
         with:
-          nupkg-path:  ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg
-          repo-owner:  'thesuavehog'
-          gh-user:  'thesuavehog'
-          token:  ${{ secrets.GITHUB_TOKEN }}
+          # Filepath of the project to be packaged, relative to root of repository
+          PROJECT_FILE_PATH: ${{ env.PROJECT_MAIN }}
+          # NuGet server uri hosting the packages, defaults to https://api.nuget.org
+          NUGET_SOURCE: https://nuget.pkg.github.com
+          NUGET_KEY: ${{ secrets.GITHUB_TOKEN }}
+          # Flag to toggle pushing symbols along with nuget package to the server, disabled by default
+          INCLUDE_SYMBOLS: true
