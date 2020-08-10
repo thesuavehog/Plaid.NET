@@ -40,14 +40,18 @@ jobs:
         run: |
           [xml]$xml = Get-Content $env:PROJECT_MAIN
           $xml.SelectNodes("//PropertyGroup/Company") | % { $_."#text" = $env:REPO_OWNER }
+          echo "Company: $($env:REPO_OWNER)"
           $xml.SelectNodes("//PropertyGroup/RepositoryUrl") | % { $_."#text" = $env:REPO_URL }
+          echo "RepositoryUrl: $($env:REPO_URL)"
           $xml.Save($env:PROJECT_MAIN)
       - name: Extract Project Metadata
         run: |
           [xml]$xml = Get-Content $env:PROJECT_MAIN;
           $val = $xml.SelectNodes('//PropertyGroup/AssemblyName') | Select-Object -Expand '#text'
+          echo "ASSEMBLY_NAME: $($val)"
           echo "::set-env name=ASSEMBLY_NAME::$($val)"
           $val = $xml.SelectNodes('//PropertyGroup/AssemblyVersion') | Select-Object -Expand '#text'
+          echo "ASSEMBLY_VERSION: $($val)"
           echo "::set-env name=ASSEMBLY_VERSION::$($val)"
       - name: Build
         run: dotnet build --configuration $env:BUILD_CONFIGURATION $env:PROJECT_MAIN
@@ -76,7 +80,7 @@ jobs:
       #- name: Add GitHub NuGet Source
       #  run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to Github Packages
-        run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --skip-duplicate --no-symbols true --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --skip-duplicate --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --symbol-api-key ${{ secrets.GITHUB_TOKEN }}
         #run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg --skip-duplicate --no-symbols true --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         #run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --source "github"
       #- name: Remove GitHub NuGet Source
