@@ -80,7 +80,7 @@ jobs:
       #- name: Add GitHub NuGet Source
       #  run: dotnet nuget add source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json -n github -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
       - name: Publish to Github Packages
-        run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --skip-duplicate --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --symbol-api-key ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --skip-duplicate --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${{ secrets.GITHUB_TOKEN }} --symbol-api-key ${{ secrets.GITHUB_TOKEN }}
         #run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/*.nupkg --skip-duplicate --no-symbols true --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
         #run: dotnet nuget push ${{ env.PROJECT_BIN }}/${{ env.BUILD_CONFIGURATION }}/${{ env.ASSEMBLY_NAME }}.${{ env.ASSEMBLY_VERSION }}.nupkg --source "github"
       #- name: Remove GitHub NuGet Source
